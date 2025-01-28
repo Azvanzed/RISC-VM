@@ -14,7 +14,7 @@
     <ClCompile Include="..\Shared\il.c" />
     <ClCompile Include="handlers\add.c" />
     <ClCompile Include="handlers\and.c" />
-    <ClCompile Include="handlers\branch.c" />
+    <ClCompile Include="handlers\goto.c" />
     <ClCompile Include="handlers\call.c" />
     <ClCompile Include="handlers\cmp.c" />
     <ClCompile Include="handlers\halt.c" />

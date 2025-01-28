@@ -60,6 +60,7 @@ enum IL_Conditions {
 	IL_CONDITIONS_LT = 1 << 2,
 	IL_CONDITIONS_GT = 1 << 3,
 	IL_CONDITIONS_HLT = 1 << 4,
+	IL_CONDITIONS_NI = 1 << 5, // Next Instruction
 };
 
 #define IL_CONDITIONS_COUNT 5
@@ -104,7 +105,7 @@ struct IL_Code {
 extern "C" {
 #endif
 
-bool IL_HasCondition(enum IL_Conditions conditions, enum IL_Conditions flag);
+bool IL_HasConditions(enum IL_Conditions conditions, enum IL_Conditions other);
 void IL_ToggleCondition(enum IL_Conditions* conditions, enum IL_Conditions condition, bool value);
 bool IL_IsBadMnemonic(enum IL_Mnemonic mnemonic);
 bool IL_IsBadCode(struct IL_Code* code);

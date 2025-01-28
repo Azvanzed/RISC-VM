@@ -1,7 +1,8 @@
-@START
-RETURN(EQ)
-AND CD, 0
-CMP 1, 1
-CALL @START
-SET R1, 0x10
+ADD R0, 1
+BRANCH(NEQ) @LoopDivision
+HALT
+
+@LoopDivision
+SET R0, 5
+
 HALT

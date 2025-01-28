@@ -7,14 +7,14 @@
 #include "il.h"
 #include "handlers.h"
 
-bool VM_HasConditions(struct IL_VirtualMachine* vm, struct IL_Code* code) {
+bool VM_HasCodeConditions(struct IL_VirtualMachine* vm, struct IL_Code* code) {
 	if (!IL_HasCodeConditions(code)) {
 		return true;
 	}
 
 	for (int condition = 0; condition < IL_CONDITIONS_COUNT; ++condition) {
 		enum IL_Conditions cond = 1 << condition;
-		if (IL_HasCondition(code->conditions, cond) && !IL_HasCondition(vm->conditions, cond)) {
+		if (IL_HasConditions(code->conditions, cond) && !VM_HasConditions(vm, cond)) {
 			return false;
 		}
 	}
@@ -22,8 +22,17 @@ bool VM_HasConditions(struct IL_VirtualMachine* vm, struct IL_Code* code) {
 	return true;
 }
 
+
+bool VM_HasConditions(struct IL_VirtualMachine* vm, enum IL_Conditions conditions) {
+	return IL_HasConditions(vm->conditions, conditions);
+}
+
+void VM_ToggleCondition(struct IL_VirtualMachine* vm, enum IL_Conditions condition, bool value) {
+	IL_ToggleCondition(&vm->conditions, condition, value);
+}
+
 void VM_Run(struct IL_VirtualMachine* vm) {
-	while (!IL_HasCondition(vm->conditions, IL_CONDITIONS_HLT)) {
+	while (!VM_HasConditions(vm, IL_CONDITIONS_HLT)) {
 		struct IL_Code* code = (struct IL_Code*)vm->ip;
 		if (IL_IsBadCode(code)) {
 			printf("Bad code at %llx\n", vm->ip);
@@ -34,7 +43,7 @@ void VM_Run(struct IL_VirtualMachine* vm) {
 		printf("%p: %s:", code, formated);
 		free((void*)formated);
 
-		if (VM_HasConditions(vm, code)) {
+		if (VM_HasCodeConditions(vm, code)) {
 			VM_HANDLERS[code->mnemonic](vm, code);
 			// VM_PrintContext(vm);
 			printf("\n");
@@ -43,7 +52,13 @@ void VM_Run(struct IL_VirtualMachine* vm) {
 			printf("(Skipped)\n");
 		}
 
-		vm->ip += IL_GetCodeSize(code);
+		if (VM_HasConditions(vm, IL_CONDITIONS_NI)) {
+			vm->ip += IL_GetCodeSize(code);
+		}
+		else {
+			// Don't increment and enable the flag for the next instruction
+			VM_ToggleCondition(vm, IL_CONDITIONS_NI, true);
+		}
 	}
 }
 
@@ -51,7 +66,7 @@ void VM_Init(struct IL_VirtualMachine* vm) {
 	memset(vm->regs, 0, sizeof(vm->regs));
 
 	vm->ip = 0;
-	vm->conditions = IL_CONDITIONS_NONE;
+	vm->conditions = IL_CONDITIONS_NI;
 }
 
 void VM_PrintContext(struct IL_VirtualMachine* vm) {

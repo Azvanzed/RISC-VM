@@ -61,9 +61,9 @@ public:
 class Instruction {
 private:
 	std::string m_location;
+	std::vector<std::shared_ptr<Operand>> m_operands;
 	IL_Mnemonic m_mnemonic;
 	IL_Conditions m_conditions;
-	std::vector<std::shared_ptr<Operand>> m_operands;
 
 public:
 	Instruction(const std::string& location, IL_Mnemonic mnemonic, IL_Conditions conditions, const std::vector<std::shared_ptr<Operand>>& operands);

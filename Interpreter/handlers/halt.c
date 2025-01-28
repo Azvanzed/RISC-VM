@@ -4,5 +4,5 @@
 #include "il.h"
 
 void VM_Handler_HALT(struct IL_VirtualMachine* vm, struct IL_Code* code) {
-	IL_ToggleCondition(&vm->conditions, IL_CONDITIONS_HLT, true);
+	VM_ToggleCondition(vm, IL_CONDITIONS_HLT, true);
 }

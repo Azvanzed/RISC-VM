@@ -163,6 +163,11 @@ Tokenizer::Tokenizer(const std::vector<std::string>& lines) {
     std::vector<std::shared_ptr<Token>> tokens;
     for (size_t i = 0; i < lines.size(); ++i) {
         const std::string& line = sanitizeToken(lines[i]);
+        
+        // Skip white line
+        if (line.empty()) {
+            continue;
+        }
 
         if (line.starts_with("@")) {
             std::string location = extractLocation(line);

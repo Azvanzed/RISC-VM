@@ -38,8 +38,8 @@ void VM_Handler_CMP(struct IL_VirtualMachine* vm, struct IL_Code* code) {
 	}
 	}
 
-	IL_ToggleCondition(&vm->conditions, IL_CONDITIONS_EQ, a == b);
-	IL_ToggleCondition(&vm->conditions, IL_CONDITIONS_NEQ, a != b);
-	IL_ToggleCondition(&vm->conditions, IL_CONDITIONS_LT, a < b);
-	IL_ToggleCondition(&vm->conditions, IL_CONDITIONS_GT, a > b);
+	VM_ToggleCondition(vm, IL_CONDITIONS_EQ, a == b);
+	VM_ToggleCondition(vm, IL_CONDITIONS_NEQ, a != b);
+	VM_ToggleCondition(vm, IL_CONDITIONS_LT, a < b);
+	VM_ToggleCondition(vm, IL_CONDITIONS_GT, a > b);
 }

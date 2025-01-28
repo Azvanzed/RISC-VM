@@ -6,8 +6,8 @@
 
 #include "il.h"
 
-bool IL_HasCondition(enum IL_Conditions conditions, enum IL_Conditions condition) {
-	return conditions & condition;
+bool IL_HasConditions(enum IL_Conditions conditions, enum IL_Conditions other) {
+	return conditions & other;
 }
 
 void IL_ToggleCondition(enum IL_Conditions* conditions, enum IL_Conditions condition, bool value) {
@@ -64,14 +64,14 @@ const char* IL_FormatConditions(enum IL_Conditions conditions) {
 	int condition_count = 0;
 	for (int i = 0; i < IL_CONDITIONS_COUNT; ++i) {
 		enum IL_Conditions condition = 1 << i;
-		if (IL_HasCondition(conditions, condition)) {
+		if (IL_HasConditions(conditions, condition)) {
 			++condition_count;
 		}
 	}
 
 	for (int i = 0, used_conditions = 0; i < IL_CONDITIONS_COUNT; ++i) {
 		enum IL_Conditions condition = 1 << i;
-		if (IL_HasCondition(conditions, condition)) {
+		if (IL_HasConditions(conditions, condition)) {
 			const char* condition_str = IL_FormatCondition(condition);
 			len += strlen(condition_str);
 			// "."
@@ -90,7 +90,7 @@ const char* IL_FormatConditions(enum IL_Conditions conditions) {
 
 	for (int i = 0, used_conditions = 0; i < IL_CONDITIONS_COUNT; ++i) {
 		enum IL_Conditions condition = 1 << i;
-		if (IL_HasCondition(conditions, condition)) {
+		if (IL_HasConditions(conditions, condition)) {
 			const char* condition_str = IL_FormatCondition(condition);
 			strcat_s(buffer, buf_size, condition_str);
 			buf_used += strlen(condition_str);

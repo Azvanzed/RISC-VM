@@ -28,7 +28,10 @@ struct IL_VirtualMachine {
 	};
 };
 
-bool VM_HasConditions(struct IL_VirtualMachine* vm, struct IL_Code* code);
+bool VM_HasCodeConditions(struct IL_VirtualMachine* vm, struct IL_Code* code);
+bool VM_HasConditions(struct IL_VirtualMachine* vm, enum IL_Conditions conditions);
+bool VM_ToggleCondition(struct IL_VirtualMachine* vm, enum IL_Conditions condition, bool value);
+
 void VM_Run(struct IL_VirtualMachine* vm);
 void VM_Init(struct IL_VirtualMachine* vm);
 void VM_PrintContext(struct IL_VirtualMachine* vm);
