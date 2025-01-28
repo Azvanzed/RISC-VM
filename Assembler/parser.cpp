@@ -160,6 +160,22 @@ IL_Conditions Parser::parseCondition(const std::shared_ptr<Token>& token) {
 	return it->second;
 }
 
+uint64_t Parser::parseImmediate(const std::shared_ptr<Token>& token) {
+	std::string value = token->getValue();
+
+	if (value.size() > 2 && value[0] == '0' && (value[1] == 'x' || value[1] == 'X')) {
+		std::string hex = value.substr(2);
+		return std::stoull(hex, nullptr, 16);
+	}
+
+	if (value.size() > 2 && value[0] == '0' && (value[1] == 'b' || value[1] == 'B')) {
+		std::string binary = value.substr(2);
+		return std::stoull(binary, nullptr, 2);
+	}
+
+	return std::stoull(value);
+}
+
 std::shared_ptr<Operand> Parser::parseOperand(const std::shared_ptr<Token>& token) {
 	if (isRegister(token)) {
 		std::string upper_token = token->getValue();
@@ -187,7 +203,7 @@ std::shared_ptr<Operand> Parser::parseOperand(const std::shared_ptr<Token>& toke
 	}
 	else {
 		std::string value = token->getValue();
-		uint64_t num = std::stoull(value);
+		uint64_t num = parseImmediate(token);
 		uint8_t size = getNumberSize(num);
 
 		return std::make_shared<ImmediateOperand>(num, size);

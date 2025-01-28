@@ -87,6 +87,8 @@ private:
 	static IL_Mnemonic parseMnemonic(const std::shared_ptr<Token>& token);
 	static IL_Conditions parseCondition(const std::shared_ptr<Token>& token);
 	static std::shared_ptr<Operand> parseOperand(const std::shared_ptr<Token>& token);
+	static uint64_t parseImmediate(const std::shared_ptr<Token>& token);
+
 public:
 	static uint8_t getNumberSize(uint64_t num);
 

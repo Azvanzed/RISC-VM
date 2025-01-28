@@ -24,7 +24,8 @@ bool IL_IsBadMnemonic(enum IL_Mnemonic mnemonic) {
 }
 
 bool IL_IsBadCode(struct IL_Code* code) {
-	return IL_IsBadMnemonic(code->mnemonic);	
+	enum IL_Mnemonic mnemonic = IL_GetCodeMnemonic(code);
+	return IL_IsBadMnemonic(mnemonic);	
 }
 
 const char* IL_FormatMnemonic(enum IL_Mnemonic mnemonic) {
@@ -108,7 +109,7 @@ const char* IL_FormatConditions(enum IL_Conditions conditions) {
 }
 
 const char* IL_FormatOperand(struct IL_Operand* operand) {
-	switch (operand->type) {
+	switch (IL_GetOperandType(operand)) {
 	case IL_OPERAND_TYPE_IMMEDIATE: {
 		switch (IL_GetOperandDataSize(operand)) {
 		case 1: {
@@ -206,7 +207,7 @@ struct IL_Operand* IL_GetNextOperand(struct IL_Operand* operand) {
 }
 
 struct IL_Operand* IL_GetCodeOperand(struct IL_Code* code, uint8_t index) {
-	assert(index < code->operand_count);
+	assert(index < IL_GetCodeOperandCount(code));
 
 	struct IL_Operand* op = (struct IL_Operand*)(code + 1);
 	for (uint8_t i = 0; i < index; ++i) {
@@ -290,21 +291,21 @@ uint8_t IL_GetOperandDataSize(struct IL_Operand* operand) {
 }
 
 void IL_ReadOperandData(struct IL_Operand* operand, void* data, uint8_t size) {
-	assert(size == operand->size);
+	assert(size == IL_GetOperandDataSize(operand));
 
 	void* data_start = (void*)((uint64_t)operand + sizeof(struct IL_Operand));
 	memcpy(data, data_start, size);
 }
 
 void IL_WriteOperandData(struct IL_Operand* operand, void* data, uint8_t size) {
-	assert(size == operand->size);
+	assert(size == IL_GetOperandDataSize(operand));
 
 	void* data_start = (void*)((uint64_t)operand + sizeof(struct IL_Operand));
 	memcpy(data_start, data, size);
 }
 
 struct IL_OperandRegister* IL_GetOperandRegister(struct IL_Operand* operand) {
-	assert(operand->type == IL_OPERAND_TYPE_REGISTER);
+	assert(IL_GetOperandType(operand) == IL_OPERAND_TYPE_REGISTER);
 	return (struct IL_OperandRegister*)((uint64_t)operand + sizeof(struct IL_Operand));
 }
 
@@ -365,7 +366,7 @@ void IL_SetCodeOperandCount(struct IL_Code* code, uint8_t count) {
 size_t IL_GetCodeSize(struct IL_Code* code) {
 	size_t code_size = 0;
 	if (IL_HasCodeOperands(code)) {
-		struct IL_Operand* last_op = IL_GetCodeOperand(code, code->operand_count - 1);
+		struct IL_Operand* last_op = IL_GetCodeOperand(code, IL_GetCodeOperandCount(code) - 1);
 		size_t last_op_size = IL_GetOperandSize(last_op);
 
 		code_size = (uint64_t)last_op + last_op_size - (uint64_t)code;
