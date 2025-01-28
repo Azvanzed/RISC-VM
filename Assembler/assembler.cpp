@@ -82,11 +82,8 @@ Assembler::Assembler(const std::vector<std::shared_ptr<Instruction>>& instructio
 
 	// Fix delayed locs
 	for (auto [insn_idx, op_idx] : delayed_loc_map) {
-		printf("insn_idx: %i | op_idx: %i\n", insn_idx, op_idx);
-
 		const std::shared_ptr<Instruction>& loc_instruction = instructions[insn_idx];
 		const std::shared_ptr<LocationOperand>& loc = std::static_pointer_cast<LocationOperand>(loc_instruction->getOperands()[op_idx]);
-
 
 		// Find targeted instruction location
 		bool corrected = false;

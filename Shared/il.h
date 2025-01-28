@@ -55,22 +55,23 @@ static const char* IL_MNEMONICS_STR[] = {
 
 enum IL_Conditions {
 	IL_CONDITIONS_NONE = 0,
-	IL_CONDITIONS_EQ = 1 << 0,
-	IL_CONDITIONS_NEQ = 1 << 1,
-	IL_CONDITIONS_LT = 1 << 2,
-	IL_CONDITIONS_GT = 1 << 3,
-	IL_CONDITIONS_HLT = 1 << 4,
-	IL_CONDITIONS_NI = 1 << 5, // Next Instruction
+	IL_CONDITIONS_HLT = 1 << 0, // Next Instruction
+	IL_CONDITIONS_EQ = 1 << 1,
+	IL_CONDITIONS_NEQ = 1 << 2,
+	IL_CONDITIONS_LT = 1 << 3,
+	IL_CONDITIONS_GT = 1 << 4,
+	IL_CONDITIONS_NI = 1 << 5,
 };
 
 #define IL_CONDITIONS_COUNT 5
 
 static const char* IL_CONDITIONS_STR[] = {
+	"HLT",
 	"EQ",
 	"NEQ",
 	"LT",
 	"GT",
-	"HLT",
+	"NI",
 };
 
 static const char* IL_REGISTERS_STR[] = {

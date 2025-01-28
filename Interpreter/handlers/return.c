@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "../vm.h"
 #include "il.h"
@@ -11,6 +12,8 @@ void VM_Handler_RETURN(struct IL_VirtualMachine* vm, struct IL_Code* code) {
 	VM_ReadMemoryValue(vm, vm->sp, &ip, sizeof(ip));
 	vm->sp += sizeof(ip);
 
-	IL_ToggleCondition(vm, IL_CONDITIONS_NI, false); // Disable Next Instruction flag so IP is not incremented
 	vm->ip = ip;
+
+	// Disable Next Instruction flag so IP is not incremented
+	VM_ToggleCondition(vm, IL_CONDITIONS_NI, false);
 }

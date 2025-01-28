@@ -33,11 +33,12 @@ const std::unordered_map<std::string, IL_Mnemonic> MNEMONICS_MAP = {
 };
 
 const std::unordered_map<std::string, IL_Conditions> CONDITIONS_MAP = {
+	{ "HLT", IL_CONDITIONS_HLT },
 	{ "EQ", IL_CONDITIONS_EQ },
 	{ "NEQ", IL_CONDITIONS_NEQ },
 	{ "LT", IL_CONDITIONS_LT },
 	{ "GT", IL_CONDITIONS_GT },
-	{ "HLT", IL_CONDITIONS_HLT }
+	{ "NI", IL_CONDITIONS_NI },
 };
 
 const std::vector<std::string> REGISTERS_MAP = {
@@ -147,14 +148,20 @@ bool Parser::isLocation(const std::shared_ptr<Token>& token) {
 }
 
 IL_Mnemonic Parser::parseMnemonic(const std::shared_ptr<Token>& token) {
-	auto it = MNEMONICS_MAP.find(token->getValue());
+	std::string upper_token = token->getValue();
+	std::transform(upper_token.begin(), upper_token.end(), upper_token.begin(), toupper);
+	
+	auto it = MNEMONICS_MAP.find(upper_token);
 	assert(it != MNEMONICS_MAP.end());
 
 	return it->second;
 }
 
 IL_Conditions Parser::parseCondition(const std::shared_ptr<Token>& token) {
-	auto it = CONDITIONS_MAP.find(token->getValue());
+	std::string upper_token = token->getValue();
+	std::transform(upper_token.begin(), upper_token.end(), upper_token.begin(), toupper);
+
+	auto it = CONDITIONS_MAP.find(upper_token);
 	assert(it != CONDITIONS_MAP.end());
 
 	return it->second;
