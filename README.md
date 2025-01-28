@@ -1,3 +1,5 @@
+This is a small side project i did in about 2 days, nothing much it was just to learn.
+
 Try
 
 ```
